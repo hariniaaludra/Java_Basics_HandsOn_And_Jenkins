@@ -30,7 +30,7 @@ pipeline {
         stage('Deliver') {
             steps {
                 dir("my-app"){
-                    deliver.bat
+                   
             }
             }
         }
