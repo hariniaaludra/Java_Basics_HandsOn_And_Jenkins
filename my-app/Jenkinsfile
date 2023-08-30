@@ -3,31 +3,28 @@ pipeline {
 
     tools {
         maven "MAVEN"
-        jdk "JDK"
     }
-
     stages {
-        stage('Initialize'){
+        stage('Build'){
             steps{
-                echo "PATH = ${M2_HOME}/bin:${PATH}"
-                echo "M2_HOME = /opt/maven"
+                bat "mvn clean package"
             }
         }
-        stage('Build') {
+        stage('Test') {
             steps {
-                dir("/var/lib/jenkins/workspace/New_demo/my-app/") {
-                sh 'mvn -B -DskipTests clean package'
-                }
-            
+                bat 'mvn test'
             }
         }
-     }
     post {
-       always {
-          junit(
-        allowEmptyResults: true,
-        testResults: '*/test-reports/.xml'
-      )
-      }
-   } 
+                always {
+                    junit 'target/surefire-reports/*.xml'
+                }
+            }
+        stage('Deliver') {
+            steps {
+                bat './jenkins/scripts/deliver.bat'
+            }
+        }
+    }
 }
+
