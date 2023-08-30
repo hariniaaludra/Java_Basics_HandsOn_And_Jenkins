@@ -7,11 +7,13 @@ pipeline {
     stages {
         stage('Build'){
             steps{
+                dir("my-app")
                 bat "mvn clean package"
             }
         }
         stage('Test') {
             steps {
+                dir("my-app")
                 bat 'mvn test'
             }
     post {
